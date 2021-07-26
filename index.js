@@ -34,10 +34,16 @@ function add(todo) {
     const li = document.createElement("li");
     li.innerText = todo_text;
     li.classList.add("list-group-item");
+    //  erase todo when rightclicked
     li.addEventListener("contextmenu", function (event) {
       event.preventDefault();
       li.remove();
       saveData();
+    });
+    // strikethrough when clicked
+    li.addEventListener("click", function (event) {
+      event.preventDefault();
+      li.classList.toggle("text-decoration-line-through");
     });
 
     ul.appendChild(li);
