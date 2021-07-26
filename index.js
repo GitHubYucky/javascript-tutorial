@@ -27,13 +27,17 @@ function add(todo) {
   let todo_text = input.value;
 
   if (todo) {
-    todo_text = todo;
+    todo_text = todo.text;
   }
 
-  if (todo_text.length > 0) {
+  if (todo_text) {
     const li = document.createElement("li");
     li.innerText = todo_text;
     li.classList.add("list-group-item");
+    if (todo && todo.completed) {
+      li.classList.add("text-decoration-line-through");
+      saveData();
+    }
     //  erase todo when rightclicked
     li.addEventListener("contextmenu", function (event) {
       event.preventDefault();
@@ -44,6 +48,7 @@ function add(todo) {
     li.addEventListener("click", function (event) {
       event.preventDefault();
       li.classList.toggle("text-decoration-line-through");
+      saveData();
     });
 
     ul.appendChild(li);
@@ -51,11 +56,17 @@ function add(todo) {
     saveData();
   }
 }
+
 function saveData() {
   const lists = document.querySelectorAll("li");
   let todos = [];
+
   lists.forEach((list) => {
-    todos.push(list.innerText);
+    let todo = {
+      text: list.innerText,
+      completed: list.classList.contains("text-decoration-line-through"),
+    };
+    todos.push(todo);
   });
   localStorage.setItem("todos", JSON.stringify(todos));
 }
